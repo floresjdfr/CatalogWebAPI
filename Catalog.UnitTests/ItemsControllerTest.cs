@@ -1,10 +1,10 @@
 namespace Catalog.UnitTests;
 
-public class UnitTest1
+public class ItemsControllerTest
 {
     [Fact]
     public void Test1()
     {
-
+        
     }
 }
