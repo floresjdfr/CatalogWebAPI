@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: catalog
-        image: floresjdfr/catalog:1.1
+        image: floresjdfr/catalog:1.2
         resources:
           limits:
             memory: "128Mi"
