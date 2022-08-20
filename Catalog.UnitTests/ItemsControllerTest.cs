@@ -77,70 +77,70 @@ public class ItemsControllerTest
     public async Task CreateItemAsync_WithItemToCreate_ReturnsCreatedItem()
     {
         //Arange
-        var itemToCreate = new CreateItemDTO()
-        {
-            Name = Guid.NewGuid().ToString(),
-            Price = rand.Next(1000)
-        };
+        var itemToCreate = new CreateItemDTO(Guid.NewGuid().ToString(), rand.Next(1000));
+
         var controller = new ItemsController(repositoryStub.Object, loggerStub.Object);
 
         //Act
         var result = await controller.CreateItemAsync(itemToCreate);
 
         //Assert
-        var createdItem = (result.Result as CreatedAtActionResult).Value as ItemDTO;
+        var createdItem = (result.Result as CreatedAtActionResult)!.Value as ItemDTO;
+
         itemToCreate
             .Should()
-            .BeEquivalentTo(createdItem, options => options.ComparingByMembers<ItemDTO>().ExcludingMissingMembers());
+            .BeEquivalentTo(
+                createdItem,
+                options => options.ComparingByMembers<ItemDTO>().ExcludingMissingMembers()
+            );
 
-        createdItem.Id.Should().NotBeEmpty();
-        createdItem.CreatedDate.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMilliseconds(1000));
+        createdItem!.Id.Should().NotBeEmpty();
+        createdItem.CreatedDate
+            .Should()
+            .BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMilliseconds(1000));
     }
 
     [Fact]
     public async Task UpdateItemAsync_WithItemToUpdate_ReturnsNoContent()
     {
         //Arange
-        
+
         var expectedItem = CreateRandomItem();
         repositoryStub
             .Setup(repo => repo.GetItemByIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(expectedItem);
-        
+
         var itemId = expectedItem.Id;
-        var itemToUpdate = new UpdateItemDTO(){
-            Name = Guid.NewGuid().ToString(),
-            Price = expectedItem.Price + 3
-        };
-        
+        var itemToUpdate = new UpdateItemDTO(Guid.NewGuid().ToString(), expectedItem.Price + 3);
+
         var controller = new ItemsController(repositoryStub.Object, loggerStub.Object);
 
         //Act
         var result = await controller.UpdateItem(itemId, itemToUpdate);
 
         //Assert
-        result.Should().BeOfType<NoContentResult>();        
+        result.Should().BeOfType<NoContentResult>();
     }
 
     [Fact]
     public async Task DeleteItemAsync_WithItemToDelete_ReturnsNoContent()
     {
         //Arange
-        
+
         var expectedItem = CreateRandomItem();
         repositoryStub
             .Setup(repo => repo.GetItemByIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(expectedItem);
-        
+
         var itemId = expectedItem.Id;
-        
+
         var controller = new ItemsController(repositoryStub.Object, loggerStub.Object);
 
         //Act
         var result = await controller.DeleteItemAsync(itemId);
 
         //Assert
-        result.Should().BeOfType<NoContentResult>();        
+        result.Should().BeOfType<NoContentResult>();
     }
 
     private Item CreateRandomItem()

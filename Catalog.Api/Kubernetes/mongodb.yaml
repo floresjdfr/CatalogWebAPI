@@ -48,7 +48,8 @@ kind: Service
 metadata:
   name: mongodb-service
 spec:
-  clusterIP: None
+  #clusterIP: None
+  type: LoadBalancer
   selector:
     app: mongodb
   ports:

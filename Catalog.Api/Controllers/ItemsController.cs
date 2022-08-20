@@ -59,13 +59,11 @@ namespace Catalog.Api.Controllers
             if (existingItem is null)
                 return NotFound();
             
-            Item item = existingItem with
-            {
-                Name = itemDTO.Name,
-                Price = itemDTO.Price
-            };
+            existingItem.Name = itemDTO.Name;
+            existingItem.Price = itemDTO.Price;
 
-            await _repository.UpdateItemAsync(item);
+
+            await _repository.UpdateItemAsync(existingItem);
             
             return NoContent();
         }
