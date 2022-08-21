@@ -19,25 +19,25 @@ namespace Catalog.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ItemDTO>> GetItemsAsync()
+        public async Task<IEnumerable<ItemDto>> GetItemsAsync()
         {
             var items = (await _repository.GetItemsAsync())
-                .Select(item => item.AsDTO());
+                .Select(item => item.AsDto());
             
             _logger.LogInformation($"{DateTime.UtcNow.ToString("hh:mm:ss")}: Retrieved {items.Count()}");
             return items;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ItemDTO>> GetItemByIdAsync(Guid id)
+        public async Task<ActionResult<ItemDto>> GetItemByIdAsync(Guid id)
         {
             var item = await _repository.GetItemByIdAsync(id);
-            return item is null ? NotFound() : item.AsDTO();
+            return item is null ? NotFound() : item.AsDto();
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<ItemDTO>> CreateItemAsync(CreateItemDTO item)
+        public async Task<ActionResult<ItemDto>> CreateItemAsync(CreateItemDto item)
         {
             Item newItem = new()
             {
@@ -49,18 +49,19 @@ namespace Catalog.Api.Controllers
             await _repository.CreateItemAsync(newItem);
 
             //
-            return CreatedAtAction(nameof(GetItemByIdAsync), new { id = newItem.Id }, newItem.AsDTO());
+            var actionName = nameof(GetItemByIdAsync);
+            return CreatedAtAction( actionName, new { id = newItem.Id }, newItem.AsDto());
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateItem(Guid id, UpdateItemDTO itemDTO)
+        public async Task<ActionResult> UpdateItem(Guid id, UpdateItemDto itemDto)
         {
             var existingItem = await _repository.GetItemByIdAsync(id);
             if (existingItem is null)
                 return NotFound();
             
-            existingItem.Name = itemDTO.Name;
-            existingItem.Price = itemDTO.Price;
+            existingItem.Name = itemDto.Name;
+            existingItem.Price = itemDto.Price;
 
 
             await _repository.UpdateItemAsync(existingItem);

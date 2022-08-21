@@ -1,6 +1,6 @@
 ﻿namespace Catalog.Api.Settings
 {
-    public class MongoDBSettings
+    public class MongoDbSettings
     {
         public string? Host { get; set; }
         public string? Port { get; set; }

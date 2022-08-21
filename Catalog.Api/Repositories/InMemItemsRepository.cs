@@ -4,7 +4,7 @@ namespace Catalog.Api.Repositories
 {
     public class InMemItemsRepository : IItemsRepository
     {
-        private readonly List<Item> items =
+        private readonly List<Item> _items =
             new()
             {
                 new Item
@@ -32,31 +32,31 @@ namespace Catalog.Api.Repositories
 
         public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            return await Task.FromResult(items);
+            return await Task.FromResult(_items);
         }
 
         public async Task<Item?> GetItemByIdAsync(Guid id)
         {
-            return await Task.FromResult(items.Where(item => item.Id.Equals(id)).SingleOrDefault());
+            return await Task.FromResult(_items.Where(item => item.Id.Equals(id)).SingleOrDefault());
         }
 
         public async Task CreateItemAsync(Item item)
         {
-            items.Add(item);
+            _items.Add(item);
             await Task.CompletedTask;
         }
 
         public async Task UpdateItemAsync(Item item)
         {
-            var index = items.FindIndex(existingItem => existingItem.Id == item.Id);
-            items[index] = item;
+            var index = _items.FindIndex(existingItem => existingItem.Id == item.Id);
+            _items[index] = item;
             await Task.CompletedTask;
         }
 
         public async Task DeleteItemAsync(Guid id)
         {
-            var index = items.FindIndex(existingItem => existingItem.Id == id);
-            items.RemoveAt(index);
+            var index = _items.FindIndex(existingItem => existingItem.Id == id);
+            _items.RemoveAt(index);
             await Task.CompletedTask;
         }
     }

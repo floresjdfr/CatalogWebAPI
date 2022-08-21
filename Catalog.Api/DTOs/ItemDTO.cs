@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Catalog.Api.DTOs
 {
-    public record ItemDTO(Guid Id, string Name, decimal Price, DateTimeOffset CreatedDate);
-    public record  CreateItemDTO([Required] string Name,[Required] [Range(1, int.MaxValue)] decimal Price);
-    public record  UpdateItemDTO([Required] string Name,[Required] [Range(1, int.MaxValue)] decimal Price);
+    public record ItemDto(Guid Id, string Name, decimal Price, DateTimeOffset CreatedDate);
+    public record  CreateItemDto([Required] string Name,[Required] [Range(1, int.MaxValue)] decimal Price);
+    public record  UpdateItemDto([Required] string Name,[Required] [Range(1, int.MaxValue)] decimal Price);
     
 }

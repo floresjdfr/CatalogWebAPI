@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 ConfigurationManager configuration = builder.Configuration;
-var mongoDBSettings = configuration.GetSection(nameof(MongoDBSettings)).Get<MongoDBSettings>();
+var mongoDbSettings = configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
 
 //Setting up serializer for Dates and Guid
 BsonSerializer.RegisterSerializer(new GuidSerializer(MongoDB.Bson.BsonType.String));
@@ -20,11 +20,11 @@ BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.Bson
 //MongoDB Client
 builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 {
-    return new MongoClient(mongoDBSettings.ConnectionString);
+    return new MongoClient(mongoDbSettings.ConnectionString);
 });
 
 //MongoDB Repository
-builder.Services.AddSingleton<IItemsRepository, MongoDBItemsRepository>();
+builder.Services.AddSingleton<IItemsRepository, MongoDbItemsRepository>();
 
 builder.Services.AddControllers(options =>
 {
@@ -36,7 +36,7 @@ builder.Services.AddSwaggerGen();
 
 //Health check
 builder.Services.AddHealthChecks().AddMongoDb(
-    mongoDBSettings.ConnectionString,
+    mongoDbSettings.ConnectionString,
     name: "mongodb",
     timeout: TimeSpan.FromSeconds(3),
     tags: new[] { "ready" });

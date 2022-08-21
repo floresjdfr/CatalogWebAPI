@@ -5,9 +5,9 @@ namespace Catalog.Api
 {
     public static class Extensions
     {
-        public static ItemDTO AsDTO(this Item item)
+        public static ItemDto AsDto(this Item item)
         {
-            return new ItemDTO(item.Id, item.Name!, item.Price, item.CreatedDate);
+            return new ItemDto(item.Id, item.Name!, item.Price, item.CreatedDate);
         }
     }
 }
